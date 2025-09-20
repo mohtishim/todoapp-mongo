@@ -10,7 +10,6 @@ const TodoApp = () => {
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  // Fetch all todos on load
   useEffect(() => {
     axios
       .get(`${VercelLink}/todos`)
@@ -18,20 +17,17 @@ const TodoApp = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  // Add todo
   const addTask = () => {
     if (task.trim() === "") return;
-
     axios
       .post(`${VercelLink}/todos`, { todo: task })
       .then((res) => {
-        setTodos((prev) => [...prev, res.data]); // ✅ FIXED
+        setTodos((prev) => [...prev, res.data]);
         setTask("");
       })
       .catch((err) => console.error(err));
   };
 
-  // Delete todo
   const deleteTask = (id) => {
     axios
       .delete(`${VercelLink}/todos/${id}`)
@@ -41,16 +37,13 @@ const TodoApp = () => {
       .catch((err) => console.error(err));
   };
 
-  // Start editing
   const startEditing = (id, text) => {
     setEditingId(id);
     setEditText(text);
   };
 
-  // Save edit
   const saveEdit = (id) => {
     if (editText.trim() === "") return;
-
     axios
       .put(`${VercelLink}/todos/${id}`, { todo: editText })
       .then(() => {
@@ -65,13 +58,10 @@ const TodoApp = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 p-6">
-      {/* MAIN TODO CARD */}
       <div className="bg-gray-800 rounded-2xl w-full max-w-md p-6 shadow-[0_0_30px_8px_rgba(59,130,246,0.6)]">
         <h1 className="text-2xl font-bold text-white mb-6 text-center select-none">
           📝 My To-Do List
         </h1>
-
-        {/* Input */}
         <div className="flex gap-2">
           <input
             type="text"
@@ -91,8 +81,6 @@ const TodoApp = () => {
             <Plus size={18} />
           </button>
         </div>
-
-        {/* List with numbering */}
         <ul className="mt-6 space-y-3 list-decimal list-inside text-white">
           <AnimatePresence>
             {todos.map((todo) => (
@@ -130,7 +118,6 @@ const TodoApp = () => {
                 ) : (
                   <>
                     <span className="flex-1">{todo.todo}</span>
-
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => startEditing(todo._id, todo.todo)}
